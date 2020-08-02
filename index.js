@@ -29,20 +29,23 @@ const url='https://www.nytimes.com/crosswords/game/mini';
     await element.screenshot({ path: screenshotPath });
     console.log(`Screenshot saved to ${screenshotPath}!\n`)
 
-    const clueNumber = 'span[class^="Clue-label"]'
+    const clueNumElement = 'span[class^="Clue-label"]'
     const clueElement = 'span[class^="Clue-text"]'
 
-    const clueNumberHandle = await page.waitForSelector(clueNumber);
-    const clueHandle = await page.waitForSelector(clueElement);
-    console.log('Clue text loaded\n')
+    console.log('Clues loaded\n')
 
-    const clueNumValue = await (await clueNumberHandle.getProperty('textContent')).jsonValue();
-    const clueValue = await (await clueHandle.getProperty('textContent')).jsonValue();
+    const clueNums = await page.$$eval(clueNumElement,
+      elem => elem.map( c => c.textContent)
+    )
+    const clues = await page.$$eval(clueElement,
+      elem => elem.map( c => c.textContent)
+    )
 
-    console.log(`Clue: ${clueNumValue}: ${clueValue}`)
-    const cluesFile = `${clueNumValue}: ${clueValue}`
+    for (const c of clues) {
+      console.log(`${c}\n`);
+      fs.appendFileSync('clues.txt', c + '\r\n');
 
-    fs.writeFileSync('clues.txt', cluesFile);
+    }
 
     browser.close();
 
