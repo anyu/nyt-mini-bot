@@ -8,6 +8,8 @@ const CLUES_PATH = 'clues.txt';
 (async () => {
   try {
     // const browser = await puppeteer.launch({ headless: false, slowMo: 100, defaultViewport: null });
+    // For rpi3
+    // const browser = await puppeteer.launch({ executablePath: 'chromium-browser', defaultViewport: null });
     const browser = await puppeteer.launch({ defaultViewport: null });
     const [page] = await browser.pages();
 
