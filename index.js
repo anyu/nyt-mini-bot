@@ -7,10 +7,11 @@ const CLUES_PATH = 'clues.txt';
 
 (async () => {
   try {
+    // const browser = await puppeteer.launch({ headless: false, slowMo: 100, defaultViewport: null });
     const browser = await puppeteer.launch({ defaultViewport: null });
     const [page] = await browser.pages();
 
-    await page.setViewport({ width:0, height:0 });
+    await page.setViewport({ width: 800, height:1000 });
 
     // Wait until no more than 2 active connections open
     await page.goto(NYT_MINI_URL, {
@@ -25,9 +26,21 @@ const CLUES_PATH = 'clues.txt';
     console.log('Modal button clicked\n');
 
     const element = await page.$('#xwd-board');
+    const bounding_box = await element.boundingBox();
     console.log('Crossword board loaded\n')
 
-    await element.screenshot({ path: XWORD_PATH });
+    await page.waitFor(3000);
+
+    await element.screenshot({
+      path: XWORD_PATH,
+      clip: {
+        x: bounding_box.x,
+        y: bounding_box.y,
+        width: Math.min(bounding_box.width, page.viewport().width),
+        height: 390,
+      },
+    });
+
     console.log(`Screenshot saved to ${XWORD_PATH}!\n`)
 
     const clueNumElement = 'span[class^="Clue-label"]'
