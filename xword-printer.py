@@ -6,6 +6,7 @@ import os, time
 
 printer = Adafruit_Thermal("/dev/serial0", 19200, timeout=5)
 
+LOGO_FILE = "nyt-logo.png"
 IMAGE_FILE = "puzzle.png"
 CLUES_FILE = "clues.txt"
 
@@ -18,6 +19,7 @@ def loadClues(fName):
 def printHeader():
   printer.justify('C')
   printer.setSize('M')
+  printer.printImage(LOGO_FILE)
   printer.println('The New York Times')
   printer.println('Daily Mini Crossword')
   printer.setSize('S')
