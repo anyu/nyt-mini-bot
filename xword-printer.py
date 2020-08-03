@@ -9,16 +9,16 @@ logger = logging.getLogger()
 
 printer = Adafruit_Thermal("/dev/serial0", 19200, timeout=5)
 
-LOGO_FILE = "nyt-logo.png"
-IMAGE_FILE = "puzzle.png"
-CLUES_FILE = "clues.txt"
+LOGO_PATH = "nyt-logo.png"
+XWORD_PATH = "puzzle.png"
+CLUES_PATH = "clues.txt"
 
 def printHeader():
   logger.info('Printing header text...')
 
   printer.justify('C')
   printer.setSize('M')
-  printer.printImage(LOGO_FILE)
+  printer.printImage(LOGO_PATH)
   printer.println('The New York Times')
   printer.println('Daily Mini Crossword')
   printer.setSize('S')
@@ -39,12 +39,12 @@ def printXwordWithClues():
 
   printer.justify('L')
   printer.feed(1)
-  printer.printImage(IMAGE_FILE) 
+  printer.printImage(XWORD_PATH)
   printer.println(clues)
   printer.feed(3)
 
 printHeader()
-clues = loadClues(CLUES_FILE)
+clues = loadClues(CLUES_PATH)
 printXwordWithClues()
 
 printer.sleep()

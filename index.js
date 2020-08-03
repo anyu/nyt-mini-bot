@@ -31,8 +31,6 @@ const CLUES_PATH = 'clues.txt';
     const bounding_box = await element.boundingBox();
     console.log('Crossword board loaded\n')
 
-    await page.waitFor(3000);
-
     await element.screenshot({
       path: XWORD_PATH,
       clip: {
