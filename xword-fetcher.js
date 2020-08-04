@@ -2,15 +2,16 @@ import puppeteer from 'puppeteer';
 import fs from 'fs';
 
 const NYT_MINI_URL='https://www.nytimes.com/crosswords/game/mini';
-const XWORD_PATH = 'puzzle.png';
+const BOARD_PATH = 'puzzle.png';
 const CLUES_PATH = 'clues.txt';
 
 (async () => {
   try {
+    // debug
     // const browser = await puppeteer.launch({ headless: false, slowMo: 100, defaultViewport: null });
-    // For rpi3
-    // const browser = await puppeteer.launch({ executablePath: 'chromium-browser', defaultViewport: null });
-    const browser = await puppeteer.launch({ defaultViewport: null });
+    // rpi3
+    // const browser = await puppeteer.launch({ , defaultViewport: null });
+    const browser = await puppeteer.launch({ executablePath: 'chromium-browser', defaultViewport: null });
     const [page] = await browser.pages();
 
     await page.setViewport({ width: 800, height:1000 });
@@ -32,7 +33,7 @@ const CLUES_PATH = 'clues.txt';
     console.log('Crossword board loaded\n')
 
     await element.screenshot({
-      path: XWORD_PATH,
+      path: BOARD_PATH,
       clip: {
         x: bounding_box.x,
         y: bounding_box.y,
@@ -41,7 +42,7 @@ const CLUES_PATH = 'clues.txt';
       },
     });
 
-    console.log(`Screenshot saved to ${XWORD_PATH}!\n`)
+    console.log(`Screenshot saved to ${BOARD_PATH}!\n`)
 
     const clueNumElement = 'span[class^="Clue-label"]'
     const clueElement = 'span[class^="Clue-text"]'

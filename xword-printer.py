@@ -49,20 +49,17 @@ def printXword():
 
 def fetchXword():
   try: 
-    nvmCmd = "nvm use v14.4.0"
-    nvmCmdResult = subprocess.run(["/bin/bash", "-i", "-c", nvmCmd], stdout=subprocess.PIPE,text=True)
-    print(nvmCmdResult.stdout)
-    logger.error(nvmCmdResult.stderr)
-  except:
-    print('Error running nvm command', file=sys.stderr)  
-  
-  try:
+    # nvmCmd = "nvm use v14.4.0"
+    # nvmCmdResult = subprocess.run(["/bin/bash", "-i", "-c", nvmCmd], capture_output=True,text=True)
+    # print(nvmCmdResult.stdout)
+    # logger.error(nvmCmdResult.stderr)
+
     npmRunCmd = ["npm", "run", "start"]
-    npmRunCmdResult = subprocess.run(npmRunCmd, stdout=subprocess.PIPE, text=True)
+    npmRunCmdResult = subprocess.run(npmRunCmd, capture_output=True, text=True)
     print(npmRunCmdResult.stdout)
     logger.error(npmRunCmdResult.stderr)
   except:
-    print('Error starting node script', file=sys.stderr)  
+    print('Error running node xword fetcher script', file=sys.stderr)
 
 fetchXword()
 printHeader()
