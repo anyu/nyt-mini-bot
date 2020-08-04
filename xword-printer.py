@@ -2,19 +2,18 @@
 
 from Adafruit_Thermal import *
 from PIL import Image
-import os, time, logging
+import os, sys, time, logging, subprocess
 
-logging.basicConfig(stream=sys.stdout, level=logging.INFO)
+#logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger()
-
 printer = Adafruit_Thermal("/dev/serial0", 19200, timeout=5)
 
 LOGO_PATH = "nyt-logo.png"
-XWORD_PATH = "puzzle.png"
+BOARD_PATH = "puzzle.png"
 CLUES_PATH = "clues.txt"
 
 def printHeader():
-  logger.info('Printing header text...')
+  print('Printing header text...')
 
   printer.justify('C')
   printer.setSize('M')
@@ -27,24 +26,47 @@ def printHeader():
   printer.boldOff()
 
 def loadClues(fName):
-  logger.info('Loading clues...')
+  print(f'Loading clues from: {CLUES_PATH}...')
 
-  f = open(fName)
-  result = f.read()
-  f.close()
-  return result
+  try: 
+    f = open(fName)
+    result = f.read()
+    f.close()
+    return result
+  except:
+    print(f'{CLUES_PATH} not found', file=sys.stderr)
 
-def printXwordWithClues():
-  logger.info('Printing xword clues...')
-
+def printXword():
   printer.justify('L')
   printer.feed(1)
-  printer.printImage(XWORD_PATH)
+
+  print(f'Printing board image from: {BOARD_PATH}...')
+  printer.printImage(BOARD_PATH)
+
+  print(f'Printing clues from: {CLUES_PATH}...')
   printer.println(clues)
   printer.feed(3)
 
+def fetchXword():
+  try: 
+    nvmCmd = "nvm use v14.4.0"
+    nvmCmdResult = subprocess.run(["/bin/bash", "-i", "-c", nvmCmd], stdout=subprocess.PIPE,text=True)
+    print(nvmCmdResult.stdout)
+    logger.error(nvmCmdResult.stderr)
+  except:
+    print('Error running nvm command', file=sys.stderr)  
+  
+  try:
+    npmRunCmd = ["npm", "run", "start"]
+    npmRunCmdResult = subprocess.run(npmRunCmd, stdout=subprocess.PIPE, text=True)
+    print(npmRunCmdResult.stdout)
+    logger.error(npmRunCmdResult.stderr)
+  except:
+    print('Error starting node script', file=sys.stderr)  
+
+fetchXword()
 printHeader()
 clues = loadClues(CLUES_PATH)
-printXwordWithClues()
+printXword()
 
 printer.sleep()
