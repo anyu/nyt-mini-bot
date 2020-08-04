@@ -12,6 +12,20 @@ LOGO_PATH = "nyt-logo.png"
 BOARD_PATH = "puzzle.png"
 CLUES_PATH = "clues.txt"
 
+def fetchXword():
+  try:
+    # nvmCmd = "nvm use v14.4.0"
+    # nvmCmdResult = subprocess.run(["/bin/bash", "-i", "-c", nvmCmd], capture_output=True,text=True)
+    # print(nvmCmdResult.stdout)
+    # logger.error(nvmCmdResult.stderr)
+
+    npmRunCmd = ["npm", "run", "start"]
+    npmRunCmdResult = subprocess.run(npmRunCmd, capture_output=True, text=True)
+    print(npmRunCmdResult.stdout)
+    logger.error(npmRunCmdResult.stderr)
+  except:
+    print('Error running node xword fetcher script', file=sys.stderr)
+
 def printHeader():
   print('Printing header text...')
 
@@ -28,7 +42,7 @@ def printHeader():
 def loadClues(fName):
   print(f'Loading clues from: {CLUES_PATH}...')
 
-  try: 
+  try:
     f = open(fName)
     result = f.read()
     f.close()
@@ -46,20 +60,6 @@ def printXword():
   print(f'Printing clues from: {CLUES_PATH}...')
   printer.println(clues)
   printer.feed(3)
-
-def fetchXword():
-  try: 
-    # nvmCmd = "nvm use v14.4.0"
-    # nvmCmdResult = subprocess.run(["/bin/bash", "-i", "-c", nvmCmd], capture_output=True,text=True)
-    # print(nvmCmdResult.stdout)
-    # logger.error(nvmCmdResult.stderr)
-
-    npmRunCmd = ["npm", "run", "start"]
-    npmRunCmdResult = subprocess.run(npmRunCmd, capture_output=True, text=True)
-    print(npmRunCmdResult.stdout)
-    logger.error(npmRunCmdResult.stderr)
-  except:
-    print('Error running node xword fetcher script', file=sys.stderr)
 
 fetchXword()
 printHeader()
