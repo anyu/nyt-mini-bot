@@ -59,7 +59,7 @@ def printXword():
 
   print(f'Printing clues from: {CLUES_PATH}...')
   printer.println(clues)
-  printer.feed(3)
+  printer.feed(4)
 
 fetchXword()
 printHeader()
