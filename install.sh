@@ -10,14 +10,19 @@ sudo apt-get install git cups wiringpi build-essential libcups2-dev libcupsimage
 
 # # Install printer driver (CUPS filter). Disregard g++ warning.
 git clone https://github.com/adafruit/zj-58
-cd zj-58
+pushd zj-58
 make
 sudo ./install
+popd
 
 # # Make printer the default printer
 # # Note the baud rate number may differ depending on printer
 sudo lpadmin -p ZJ-58 -E -v serial:/dev/serial0?baud=19200 -m zjiang/ZJ-58.ppd
 sudo lpoptions -d ZJ-58
+
+# Test printer
+# stty -F /dev/serial0 19200
+# echo -e "This is a test.\\n\\n" > /dev/serial0
 
 # Restart system
 # sudo reboot
@@ -25,10 +30,6 @@ sudo lpoptions -d ZJ-58
 # Clone Adafruit Python Thermal Printer library repo
 git clone git@github.com:adafruit/Python-Thermal-Printer.git
 cp Python-Thermal-Printer/Adafruit_Thermal.py ../
-
-# Test printer
-# stty -F /dev/serial0 19200
-# echo -e "This is a test.\\n\\n" > /dev/serial0
 
 #########################################
 # Generally useful

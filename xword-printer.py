@@ -8,7 +8,7 @@ import os, sys, time, logging, subprocess
 logger = logging.getLogger()
 printer = Adafruit_Thermal("/dev/serial0", 19200, timeout=5)
 
-LOGO_PATH = "nyt-logo.png"
+LOGO_PATH = "images/nyt-logo.png"
 BOARD_PATH = "puzzle.png"
 CLUES_PATH = "clues.txt"
 
