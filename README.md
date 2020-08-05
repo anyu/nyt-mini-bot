@@ -6,7 +6,7 @@ My creation was inspired by the [Vomit Comic Robot](https://imgur.com/a/hhrnQoC#
 ![NYT Mini Bot image](images/nyt-mini-bot1.jpg)
 ![NYT Mini Bot image](images/nyt-mini-bot2.jpg)
 
-## Try it at home!
+## Make me at home!
 
 ### Hardware
 - [Raspberry Pi 3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b)
@@ -24,13 +24,15 @@ My creation was inspired by the [Vomit Comic Robot](https://imgur.com/a/hhrnQoC#
 1. Follow [Adafruit’s tutorial](https://learn.adafruit.com/networked-thermal-printer-using-cups-and-raspberry-pi/connect-and-configure-printer) to connect and configure the rpi to the printer
 
 ### NYT Mini Bot scripts
-*Requirements: Node v14+, Python 3.7+ (pre-installed on newer rpi OS images)*
+*Requirements: npm, Node v14+, Python 3.7+ (pre-installed on newer rpi OS images)*
 
 #### xword-fetcher.js script
-Using [Puppeteer](https://github.com/puppeteer/puppeteer), this Node script navigates to the NYT Mini page, takes a screenshot of the crossword board, and saves the clues to a text file.
+Using [Puppeteer](https://github.com/puppeteer/puppeteer), this Node script navigates to the NYT Mini page, takes a screenshot of the crossword board, and saves the date/clues to a text file.
+
+To test out in isolation, run `npm run start`
 
 #### xword-printer.py script
-This Python script executes the xword-fetcher script, connects to the thermal printer using the [Adafruit Python Thermal Printer library](https://github.com/adafruit/Python-Thermal-Printer), and prints out the crossword board/clues retrieved by xword-fetcher.
+This Python script executes the xword-fetcher script, connects to the thermal printer using the [Adafruit Python Thermal Printer library](https://github.com/adafruit/Python-Thermal-Printer), and prints out the puzzle retrieved by xword-fetcher.
 
 1. SSH into the rpi and clone this repo
 1. Run `./install.sh` (note: the first sections of this install script overlaps with the printer tutorial steps from above; can skip. Just make sure the `Python-Thermal-Printer/Adafruit_Thermal.py` file is copied within the nyt-mini-bot repo)

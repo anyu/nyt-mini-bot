@@ -2,7 +2,7 @@
 
 from Adafruit_Thermal import *
 from PIL import Image
-import os, sys, time, logging, subprocess
+import os, sys, logging, subprocess
 
 #logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger()
@@ -26,6 +26,19 @@ def fetchXword():
   except:
     print('Error running node xword fetcher script', file=sys.stderr)
 
+def loadDateAndClues(fName):
+  print(f'Loading text from: {PUZZLE_TEXT_PATH}...')
+
+  try:
+    f = open(fName)
+    date = f.readline().rstrip('\n')
+    next(f)
+    clues = f.read()
+    f.close()
+    return date, clues
+  except:
+    print(f'{PUZZLE_TEXT_PATH} not found', file=sys.stderr)
+
 def printHeader():
   print('Printing header text...')
 
@@ -36,19 +49,8 @@ def printHeader():
   printer.println('Daily Mini Crossword')
   printer.setSize('S')
   printer.boldOn()
-  printer.println(time.strftime('%A, %b %d, %Y'))
+  printer.println(date)
   printer.boldOff()
-
-def loadClues(fName):
-  print(f'Loading clues from: {PUZZLE_TEXT_PATH}...')
-
-  try:
-    f = open(fName)
-    result = f.read()
-    f.close()
-    return result
-  except:
-    print(f'{PUZZLE_TEXT_PATH} not found', file=sys.stderr)
 
 def printXword():
   printer.justify('L')
@@ -60,10 +62,12 @@ def printXword():
   print(f'Printing clues from: {PUZZLE_TEXT_PATH}...')
   printer.println(clues)
   printer.feed(4)
+  print('')
+  print('Happy puzzling!')
 
 fetchXword()
+date, clues = loadDateAndClues(PUZZLE_TEXT_PATH)
 printHeader()
-clues = loadClues(PUZZLE_TEXT_PATH)
 printXword()
 
 printer.sleep()
