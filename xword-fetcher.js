@@ -1,9 +1,19 @@
 import puppeteer from 'puppeteer';
 import fs from 'fs';
 
-const NYT_MINI_URL='https://www.nytimes.com/crosswords/game/mini';
-const BOARD_PATH = 'puzzle.png';
-const CLUES_PATH = 'clues.txt';
+const nytMiniURL='https://www.nytimes.com/crosswords/game/mini';
+const boardPath = 'xwdBoard.png';
+const puzzleTextPath = 'puzzle.txt';
+
+// DOM selectors - subject to changes on NYT xword page
+const modalBtnSelector = 'button[aria-label="OK"]';
+const xwdBoardSelector = '#xwd-board';
+const puzzleDateSelector = '[class^="PuzzleDetails-date"]';
+const clueNumSelector = 'span[class^="Clue-label"]';
+const clueSelector = 'span[class^="Clue-text"]';
+
+const acrossTitle = '\nACROSS\r\n';
+const downTitle = '\nDOWN\r\n';
 
 (async () => {
   try {
@@ -16,60 +26,61 @@ const CLUES_PATH = 'clues.txt';
     await page.setViewport({ width: 800, height:1000 });
 
     // Wait until no more than 2 active connections open
-    await page.goto(NYT_MINI_URL, {
-      waitUntil: 'networkidle2'
-    });
-    console.log('Page loaded\n');
+    await page.goto(nytMiniURL, { waitUntil: 'networkidle2' });
+    console.log('* Page loaded');
 
-    await page.waitForSelector('button[aria-label="OK"]', {
-      visible: true,
-    });
-    await page.click('button[aria-label="OK"]');
-    console.log('Modal button clicked\n');
+    await page.waitForSelector(modalBtnSelector, { visible: true });
+    await page.click(modalBtnSelector);
+    console.log('* Modal button clicked');
 
-    const element = await page.$('#xwd-board');
-    const bounding_box = await element.boundingBox();
-    console.log('Crossword board loaded\n')
+    // Retrieve xword board
+    const xwdBoardElem = await page.$(xwdBoardSelector);
+    const xwdBoardBoundingBox = await xwdBoardElem.boundingBox();
+    console.log('* Board loaded')
 
-    await element.screenshot({
-      path: BOARD_PATH,
+    await xwdBoardElem.screenshot({
+      path: boardPath,
       clip: {
-        x: bounding_box.x,
-        y: bounding_box.y,
-        width: Math.min(bounding_box.width, page.viewport().width),
+        x: xwdBoardBoundingBox.x,
+        y: xwdBoardBoundingBox.y,
+        width: Math.min(xwdBoardBoundingBox.width, page.viewport().width),
         height: 390,
       },
     });
+    console.log(`* Board screenshot saved to ${boardPath}`)
 
-    console.log(`Screenshot saved to ${BOARD_PATH}!\n`)
-
-    const clueNumElement = 'span[class^="Clue-label"]'
-    const clueElement = 'span[class^="Clue-text"]'
-
-    console.log('Clues loaded\n')
-
-    const clueNums = await page.$$eval(clueNumElement,
+    // Retrieve puzzle date
+    const puzzleDateElem = await page.$$eval(puzzleDateSelector, 
       elem => elem.map( c => c.textContent )
     )
-    const clues = await page.$$eval(clueElement,
+    const puzzleDate = puzzleDateElem[0];
+    console.log(`* Puzzle date found: ${puzzleDate}`)
+
+    // Retrieve clues
+    const clueNums = await page.$$eval(clueNumSelector,
       elem => elem.map( c => c.textContent )
     )
+    const clues = await page.$$eval(clueSelector,
+      elem => elem.map( c => c.textContent )
+    )
+    console.log('* Clues found')
 
-    let cluesFileData = 'ACROSS\r\n'
-    let counter = 0;
+    // Format and write date/clues to file
+    let puzzleText = `${puzzleDate}\n${acrossTitle}`;
+    let clueColumn = 0;
 
     for (let i = 0; i < clues.length; i++) {
-      if (clueNums[i] == 1) counter++;
-      if (counter == 2) {
-        cluesFileData += '\nDOWN\r\n';
-        counter = 0;
+      if (clueNums[i] == 1) clueColumn++;
+      if (clueColumn == 2) {
+        puzzleText += downTitle;
+        clueColumn = 0;
       }
-      cluesFileData += `${clueNums[i]} ${clues[i]} \r\n`;
+      puzzleText += `${clueNums[i]} ${clues[i]} \r\n`;
     }
 
-    console.log(cluesFileData);
-    fs.writeFileSync(CLUES_PATH, cluesFileData);
-    console.log(`Clues saved to ${CLUES_PATH}!`);
+    fs.writeFileSync(puzzleTextPath, puzzleText);
+    console.log(`* Puzzle text saved to ${puzzleTextPath}\n`);
+    console.log(puzzleText);
 
     browser.close();
 

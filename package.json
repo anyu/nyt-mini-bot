@@ -7,7 +7,7 @@
     "start": "node xword-fetcher.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "An Yu",
   "license": "ISC",
   "dependencies": {
     "puppeteer": "^5.2.1"

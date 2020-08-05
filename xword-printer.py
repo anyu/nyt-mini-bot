@@ -9,8 +9,8 @@ logger = logging.getLogger()
 printer = Adafruit_Thermal("/dev/serial0", 19200, timeout=5)
 
 LOGO_PATH = "images/nyt-logo.png"
-BOARD_PATH = "puzzle.png"
-CLUES_PATH = "clues.txt"
+BOARD_PATH = "xwdBoard.png"
+PUZZLE_TEXT_PATH = "puzzle.txt"
 
 def fetchXword():
   try:
@@ -40,7 +40,7 @@ def printHeader():
   printer.boldOff()
 
 def loadClues(fName):
-  print(f'Loading clues from: {CLUES_PATH}...')
+  print(f'Loading clues from: {PUZZLE_TEXT_PATH}...')
 
   try:
     f = open(fName)
@@ -48,7 +48,7 @@ def loadClues(fName):
     f.close()
     return result
   except:
-    print(f'{CLUES_PATH} not found', file=sys.stderr)
+    print(f'{PUZZLE_TEXT_PATH} not found', file=sys.stderr)
 
 def printXword():
   printer.justify('L')
@@ -57,13 +57,13 @@ def printXword():
   print(f'Printing board image from: {BOARD_PATH}...')
   printer.printImage(BOARD_PATH)
 
-  print(f'Printing clues from: {CLUES_PATH}...')
+  print(f'Printing clues from: {PUZZLE_TEXT_PATH}...')
   printer.println(clues)
   printer.feed(4)
 
 fetchXword()
 printHeader()
-clues = loadClues(CLUES_PATH)
+clues = loadClues(PUZZLE_TEXT_PATH)
 printXword()
 
 printer.sleep()
