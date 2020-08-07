@@ -84,6 +84,7 @@ def init():
   date, clues = loadDateAndClues(PUZZLE_TEXT_PATH)
   printHeader(date)
   printXword(clues)
+  end()
 
 def end():
   printer.sleep()
@@ -100,4 +101,3 @@ while True:
 
   else:
     GPIO.output(LED_BUTTON, GPIO.LOW)
-  end()
