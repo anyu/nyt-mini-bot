@@ -9,25 +9,26 @@ My creation was inspired by the [Vomit Comic Robot](https://imgur.com/a/hhrnQoC#
 ## Make me at home!
 
 ### Hardware
-- [Raspberry Pi 3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b)
+- Raspberry Pi (any model should work, I used a [3 Model B](https://www.raspberrypi.org/products/raspberry-pi-3-model-b))
 - [Adafruit Mini Thermal Receipt Printer Starter Pack](https://www.adafruit.com/product/600)
-- Micro SD card
-- 5V 3A Power Supply Charger
-- Ethernet cable
+- micro SD card
+- 5V 2A Micro USB AC Charger Power Supply Adapter
+- ethernet cable
+- basic Pi case (dependent on model, I used [this](https://www.amazon.com/gp/product/B00MQLB1N6/) one)
 
 *For button and light functionality*
 - LED
 - push button
 - female-to-male jumper wires x4
 - resistor
-- breadboard
+- solderless breadboard
 
 ![materials](images/materials.jpg)
 
 ### Headless Raspberry Pi + thermal printer setup
-1. Flash a [Raspberry Pi OS](https://www.raspberrypi.org/downloads/raspberry-pi-os/) image to micro SD card with [Etcher](https://www.balena.io/etcher) (note: don't need the version with the extra 'recommended software', but may need at least the full vs lite image)
+1. Flash a [Raspberry Pi OS](https://www.raspberrypi.org/downloads/raspberry-pi-os/) image (the full version, not lite) to micro SD card with [Etcher](https://www.balena.io/etcher)
 1. Enable SSH on the rpi by adding a blank `ssh` file in the `/boot` directory of the SD card
-1. Connect the rpi power supply and insert the SD card 
+1. Connect the rpi power supply and insert the SD card
 1. Connect ethernet cable between the rpi and router
 1. SSH into the rpi
 1. Follow [Adafruit’s tutorial](https://learn.adafruit.com/networked-thermal-printer-using-cups-and-raspberry-pi/connect-and-configure-printer) to connect and configure the rpi to the printer
@@ -50,3 +51,14 @@ This Python script executes the xword-fetcher script, connects to the thermal pr
 1. Run `./install.sh` (note: the first sections of this install script overlaps with the printer tutorial steps from above; can skip. Just make sure the `Python-Thermal-Printer/Adafruit_Thermal.py` file is copied within the nyt-mini-bot repo)
 1. Run `./xword-printer.py`
 1. Press the button!
+
+## Bonus
+
+### Craft a shell for your printer
+![NYT Mini Bot - custom shell](images/nyt-mini-bot-shell.jpg)
+
+### Other improvements
+TODO:
+- Get WiFi working on rpi
+- Trigger xword-printer.py script on rpi boot
+- Stream xword-fetcher.js script output live
