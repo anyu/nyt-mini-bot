@@ -10,7 +10,8 @@
   "author": "An Yu",
   "license": "ISC",
   "dependencies": {
-    "puppeteer": "^5.2.1"
+    "puppeteer": "^5.2.1",
+    "wordwrap": "^1.0.0"
   },
   "type": "module"
 }

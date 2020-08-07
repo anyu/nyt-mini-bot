@@ -1,5 +1,6 @@
 import puppeteer from 'puppeteer';
 import fs from 'fs';
+import wrap from 'wordwrap';
 
 const nytMiniURL='https://www.nytimes.com/crosswords/game/mini';
 const boardPath = 'xwdBoard.png';
@@ -68,6 +69,7 @@ const downTitle = '\nDOWN\r\n';
     // Format and write date/clues to file
     let puzzleText = `${puzzleDate}\n${acrossTitle}`;
     let clueColumn = 0;
+    let wrappedClue = '';
 
     for (let i = 0; i < clues.length; i++) {
       if (clueNums[i] == 1) clueColumn++;
@@ -75,7 +77,8 @@ const downTitle = '\nDOWN\r\n';
         puzzleText += downTitle;
         clueColumn = 0;
       }
-      puzzleText += `${clueNums[i]} ${clues[i]} \r\n`;
+      wrappedClue = wrap(32)(`${clueNums[i]} ${clues[i]}`)
+      puzzleText += `${wrappedClue}\n`;
     }
 
     fs.writeFileSync(puzzleTextPath, puzzleText);

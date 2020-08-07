@@ -80,10 +80,14 @@ def printXword(clues):
   print('Happy puzzling!')
 
 def init():
-    fetchXword()
-    date, clues = loadDateAndClues(PUZZLE_TEXT_PATH)
-    printHeader(date)
-    printXword(clues)
+  fetchXword()
+  date, clues = loadDateAndClues(PUZZLE_TEXT_PATH)
+  printHeader(date)
+  printXword(clues)
+
+def end():
+  printer.sleep()
+  sys.exit()
 
 while True:
   button_state = GPIO.input(PRINT_BUTTON)
@@ -92,8 +96,8 @@ while True:
     print("The Button has been pressed.\n")
     GPIO.output(LED_BUTTON, GPIO.HIGH)
     init()
+    GPIO.output(LED_BUTTON, GPIO.LOW)
 
   else:
     GPIO.output(LED_BUTTON, GPIO.LOW)
-
-#printer.sleep()
+  end()
