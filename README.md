@@ -56,6 +56,7 @@ This Python script executes the xword-fetcher script, connects to the thermal pr
 
 ### Craft a shell for your printer
 ![NYT Mini Bot - custom shell](images/nyt-mini-bot-shell.jpg)
+*material: shoebox*
 
 ### Other improvements
 TODO:

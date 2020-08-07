@@ -5,17 +5,21 @@ from PIL import Image
 import os, sys, logging, subprocess
 import RPi.GPIO as GPIO
 
-#logging.basicConfig(stream=sys.stdout, level=logging.INFO)
-logger = logging.getLogger()
-printer = Adafruit_Thermal("/dev/serial0", 19200, timeout=5)
+# Printer configs (dependent on printer)
+SERIAL_PORT = "/dev/serial0"
+PRINTER_BAUD_RATE = 19200
 
+# Expected file paths
 LOGO_PATH = "images/nyt-logo.png"
 BOARD_PATH = "xwdBoard.png"
 PUZZLE_TEXT_PATH = "puzzle.txt"
 
-# GPIO PINS (BCM numbers)
+# GPIO pins (BCM numbers)
 LED_BUTTON = 20
 PRINT_BUTTON = 21
+
+logger = logging.getLogger()
+printer = Adafruit_Thermal(SERIAL_PORT, PRINTER_BAUD_RATE, timeout=5)
 
 # Init GPIO states
 GPIO.setmode(GPIO.BCM)
@@ -84,7 +88,6 @@ def init():
   date, clues = loadDateAndClues(PUZZLE_TEXT_PATH)
   printHeader(date)
   printXword(clues)
-  end()
 
 def end():
   printer.sleep()
@@ -98,6 +101,7 @@ while True:
     GPIO.output(LED_BUTTON, GPIO.HIGH)
     init()
     GPIO.output(LED_BUTTON, GPIO.LOW)
+    end()
 
   else:
     GPIO.output(LED_BUTTON, GPIO.LOW)
