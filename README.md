@@ -5,6 +5,7 @@ My creation was inspired by the [Vomit Comic Robot](https://imgur.com/a/hhrnQoC#
 
 ![NYT Mini Bot image](images/nyt-mini-bot1.jpg)
 ![NYT Mini Bot image](images/nyt-mini-bot2.jpg)
+![NYT Mini Bot demo gif](images/demo.gif)
 
 ## Make me at home!
 
