@@ -40,18 +40,25 @@ My creation was inspired by the [Vomit Comic Robot](https://imgur.com/a/hhrnQoC#
 ### NYT Mini Bot scripts
 *Requirements: npm, Node v14+, Python 3.7+ (pre-installed on newer rpi OS images)*
 
-#### xword-fetcher.js script
-Using [Puppeteer](https://github.com/puppeteer/puppeteer), this Node script navigates to the NYT Mini page, takes a screenshot of the crossword board, and saves the date/clues to a text file.
-
-To test out in isolation, run `npm run start`
-
-#### xword-printer.py script
-This Python script executes the xword-fetcher script, connects to the thermal printer using the [Adafruit Python Thermal Printer library](https://github.com/adafruit/Python-Thermal-Printer), and prints out the puzzle retrieved by xword-fetcher.
-
 1. SSH into the rpi and clone this repo
 1. Run `./install.sh` (note: the first sections of this install script overlaps with the printer tutorial steps from above; can skip. Just make sure the `Python-Thermal-Printer/Adafruit_Thermal.py` file is copied within the nyt-mini-bot repo)
 1. Run `./xword-printer.py`
 1. Press the button!
+
+---
+
+#### xword-fetcher.js script
+Using [Puppeteer](https://github.com/puppeteer/puppeteer), this Node script navigates to the NYT Mini page, takes a screenshot of the crossword board, and saves the date/clues to a text file.
+
+To test in isolation:
+
+1. If outside of the pi, remove `executablePath: 'chromium-browser',` from the `puppeteer.launch` line
+1. Run `npm run start`
+
+#### xword-printer.py script
+This Python script executes the xword-fetcher script as a subprocess, connects to the printer using the [Adafruit Python Thermal Printer library](https://github.com/adafruit/Python-Thermal-Printer), and prints out the puzzle retrieved by xword-fetcher.
+
+
 
 ## Bonus
 
@@ -61,6 +68,5 @@ This Python script executes the xword-fetcher script, connects to the thermal pr
 
 ### Other improvements
 TODO:
-- Get WiFi working on rpi
 - Trigger xword-printer.py script on rpi boot
-- Stream xword-fetcher.js script output live
+- Get WiFi working on rpi

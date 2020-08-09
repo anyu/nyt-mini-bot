@@ -2,7 +2,8 @@
 
 from Adafruit_Thermal import *
 from PIL import Image
-import os, sys, logging, subprocess
+from subprocess import Popen, PIPE
+import os, sys, logging
 import RPi.GPIO as GPIO
 
 # Printer configs (dependent on printer)
@@ -27,23 +28,38 @@ GPIO.setwarnings(False)
 GPIO.setup(LED_BUTTON, GPIO.OUT)
 GPIO.setup(PRINT_BUTTON, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-def fetchXword():
-  try:
-    # nvmCmd = "nvm use v14.4.0"
-    # nvmCmdResult = subprocess.run(["/bin/bash", "-i", "-c", nvmCmd], capture_output=True,text=True)
-    # print(nvmCmdResult.stdout)
-    # logger.error(nvmCmdResult.stderr)
+def init():
+  print('Running xword-printer...')
 
-    print('Running xword-fetcher...')
-    npmRunCmd = ["npm", "run", "start"]
-    npmRunCmdResult = subprocess.run(npmRunCmd, capture_output=True, text=True)
-    print(npmRunCmdResult.stdout)
-    logger.error(npmRunCmdResult.stderr)
-  except:
-    print('Error running xword-fetcher', file=sys.stderr)
+  while True:
+    button_state = GPIO.input(PRINT_BUTTON)
+
+    if button_state == False:
+      print("\nThe Button has been pressed.\n")
+      GPIO.output(LED_BUTTON, GPIO.HIGH)
+
+      fetchXword()
+      date, clues = loadDateAndClues(PUZZLE_TEXT_PATH)
+      printHeader(date)
+      printXword(clues)
+
+      GPIO.output(LED_BUTTON, GPIO.LOW)
+      end()
+
+    else:
+      GPIO.output(LED_BUTTON, GPIO.LOW)
+
+def fetchXword():
+  print('Running xword-fetcher...')
+
+  # Run node script as subprocess and stream output live
+  npmRunCmd = ["npm", "run", "start"]
+  with Popen(npmRunCmd, stdout=PIPE, text=True, bufsize=1) as p:
+    for line in p.stdout:
+      print(line, end='')
 
 def loadDateAndClues(fName):
-  print(f'Loading text from: {PUZZLE_TEXT_PATH}...')
+  print(f'* Loading text from: {PUZZLE_TEXT_PATH}...')
 
   try:
     f = open(fName)
@@ -51,14 +67,14 @@ def loadDateAndClues(fName):
     next(f)
     clues = f.read()
     f.close()
-    print(f'Retrieved date: {date}')
+    print(f'* Retrieved date: {date}')
     return date, clues
   except:
 
     print(f'{PUZZLE_TEXT_PATH} not found', file=sys.stderr)
 
 def printHeader(date):
-  print('Printing header text...')
+  print('* Printing header text...')
 
   printer.justify('C')
   printer.setSize('M')
@@ -74,34 +90,17 @@ def printXword(clues):
   printer.justify('L')
   printer.feed(1)
 
-  print(f'Printing board image from: {BOARD_PATH}...')
+  print(f'* Printing board image from: {BOARD_PATH}...')
   printer.printImage(BOARD_PATH)
 
-  print(f'Printing clues from: {PUZZLE_TEXT_PATH}...')
+  print(f'* Printing clues from: {PUZZLE_TEXT_PATH}...')
   printer.println(clues)
   printer.feed(4)
   print('')
   print('Happy puzzling!')
 
-def init():
-  fetchXword()
-  date, clues = loadDateAndClues(PUZZLE_TEXT_PATH)
-  printHeader(date)
-  printXword(clues)
-
 def end():
   printer.sleep()
   sys.exit()
 
-while True:
-  button_state = GPIO.input(PRINT_BUTTON)
-
-  if button_state == False:
-    print("The Button has been pressed.\n")
-    GPIO.output(LED_BUTTON, GPIO.HIGH)
-    init()
-    GPIO.output(LED_BUTTON, GPIO.LOW)
-    end()
-
-  else:
-    GPIO.output(LED_BUTTON, GPIO.LOW)
+init()
