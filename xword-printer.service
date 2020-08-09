@@ -1,0 +1,12 @@
+[Unit]
+Description=NYT Mini Bot xword-printer service
+After=network.target
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/python3 /home/pi/nyt-mini-bot/xword-printer.py
+Restart=on-failure
+Environment=NVM_DIR="$HOME/.nvm" #TBD
+
+[Install]
+WantedBy=multi-user.target

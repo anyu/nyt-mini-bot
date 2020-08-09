@@ -48,3 +48,15 @@ nvm install v14.4.0
 
 # Needed for Puppeteer
 sudo apt-get install chromium-browser -y
+
+#########################################
+# WIP: Run xword-printer script on rpi boot
+
+# Script starts successfully but node subprocess not working
+
+#########################################
+
+# sudo cp xword-printer.service /lib/systemd/system/xword-printer.service
+# sudo chmod 644 /lib/systemd/system/xword-printer.service
+# sudo systemctl daemon-reload
+# sudo systemctl enable xword-printer.service
