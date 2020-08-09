@@ -11,8 +11,8 @@ SERIAL_PORT = "/dev/serial0"
 PRINTER_BAUD_RATE = 19200
 
 # Expected file paths
-LOGO_PATH = "images/nyt-logo.png"
-BOARD_PATH = "xwdBoard.png"
+LOGO_PATH = "images/nyt_logo.png"
+BOARD_PATH = "xwd_board.png"
 PUZZLE_TEXT_PATH = "puzzle.txt"
 
 # GPIO pins (BCM numbers)
@@ -38,10 +38,10 @@ def init():
       print("\nThe Button has been pressed.\n")
       GPIO.output(LED_BUTTON, GPIO.HIGH)
 
-      fetchXword()
-      date, clues = loadDateAndClues(PUZZLE_TEXT_PATH)
-      printHeader(date)
-      printXword(clues)
+      fetch_xword()
+      date, clues = load_date_clues(PUZZLE_TEXT_PATH)
+      print_header(date)
+      print_xword(clues)
 
       GPIO.output(LED_BUTTON, GPIO.LOW)
       end()
@@ -49,16 +49,16 @@ def init():
     else:
       GPIO.output(LED_BUTTON, GPIO.LOW)
 
-def fetchXword():
+def fetch_xword():
   print('Running xword-fetcher...')
 
   # Run node script as subprocess and stream output live
-  npmRunCmd = ["npm", "run", "start"]
-  with Popen(npmRunCmd, stdout=PIPE, text=True, bufsize=1) as p:
+  npm_run_cmd = ["npm", "run", "start"]
+  with Popen(npm_run_cmd, stdout=PIPE, text=True, bufsize=1) as p:
     for line in p.stdout:
       print(line, end='')
 
-def loadDateAndClues(fName):
+def load_date_clues(fName):
   print(f'* Loading text from: {PUZZLE_TEXT_PATH}...')
 
   try:
@@ -73,7 +73,7 @@ def loadDateAndClues(fName):
 
     print(f'{PUZZLE_TEXT_PATH} not found', file=sys.stderr)
 
-def printHeader(date):
+def print_header(date):
   print('* Printing header text...')
 
   printer.justify('C')
@@ -86,7 +86,7 @@ def printHeader(date):
   printer.println(date)
   printer.boldOff()
 
-def printXword(clues):
+def print_xword(clues):
   printer.justify('L')
   printer.feed(1)
 

@@ -3,7 +3,7 @@ import fs from 'fs';
 import wrap from 'wordwrap';
 
 const nytMiniURL='https://www.nytimes.com/crosswords/game/mini';
-const boardPath = 'xwdBoard.png';
+const boardPath = 'xwd_board.png';
 const puzzleTextPath = 'puzzle.txt';
 
 // DOM selectors - subject to changes on NYT xword page
