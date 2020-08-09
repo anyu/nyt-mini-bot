@@ -18,6 +18,7 @@ const downTitle = '\nDOWN\r\n';
 
 (async () => {
   try {
+    console.log('* Navigating to NYT Mini Crossword page...\n');
     // debug
     // const browser = await puppeteer.launch({ headless: false, slowMo: 100, defaultViewport: null });
     // use chromium-browser for rpi3

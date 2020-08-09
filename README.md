@@ -63,4 +63,3 @@ This Python script executes the xword-fetcher script, connects to the thermal pr
 TODO:
 - Get WiFi working on rpi
 - Trigger xword-printer.py script on rpi boot
-- Stream xword-fetcher.js script output live
