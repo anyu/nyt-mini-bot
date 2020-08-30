@@ -34,8 +34,14 @@ My creation was inspired by the [Vomit Comic Robot](https://imgur.com/a/hhrnQoC#
 1. SSH into the rpi
 1. Follow [Adafruit’s tutorial](https://learn.adafruit.com/networked-thermal-printer-using-cups-and-raspberry-pi/connect-and-configure-printer) to connect and configure the rpi to the printer
 
-### LED and button trigger
-// TODO
+### LED and button wiring
+Wire up the LED, button, and resistor as follows:  
+
+![breadboard diagram](images/bboard-diagram.jpg)
+
+#### Helpful Resources
+- [GPIO pin diagram](https://www.raspberrypi.org/documentation/usage/gpio/)
+- [PiHut tutorial](https://thepihut.com/blogs/raspberry-pi-tutorials/27968772-turning-on-an-led-with-your-raspberry-pis-gpio-pins) explains the concepts behind wiring up the breadboard
 
 ### NYT Mini Bot scripts
 *Requirements: npm, Node v14+, Python 3.7+ (pre-installed on newer rpi OS images)*
